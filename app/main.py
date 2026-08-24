@@ -1,4 +1,5 @@
 """FastAPI application entry point for Dartmouth Places."""
+from app.schemas import HealthResponse
 
 from fastapi import FastAPI
 
@@ -7,6 +8,12 @@ app = FastAPI(
     description="Share useful or interesting places around campus.",
     version="0.1.0",
 )
+
+
+@app.get("/health", tags=["health"])
+def health() -> HealthResponse:
+    """Liveness check. No authentication required."""
+    return HealthResponse()
 
 
 @app.get("/")
