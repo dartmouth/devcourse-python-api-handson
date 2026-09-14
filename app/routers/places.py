@@ -6,6 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
 from sqlmodel import Session, select
 
 from app.database import get_session
+from app.middleware.auth import verify_bearer_token
 from app.models import Place
 from app.schemas import Category, NoiseLevel, PlaceCreate, PlaceResponse, PlaceUpdate
 
@@ -66,6 +67,7 @@ def get_place(place_id: int, session: Session = Depends(get_session)) -> Place:
 def create_place(
     payload: PlaceCreate,
     session: Session = Depends(get_session),
+    is_authenticated: bool = Depends(verify_bearer_token),
 ) -> Place:
     """Create a place."""
 
@@ -86,6 +88,7 @@ def update_place(
     place_id: int,
     payload: PlaceUpdate,
     session: Session = Depends(get_session),
+    is_authenticated: bool = Depends(verify_bearer_token),
 ) -> Place:
     """Partially update a place.
 
@@ -113,6 +116,7 @@ def update_place(
 def delete_place(
     place_id: int,
     session: Session = Depends(get_session),
+    is_authenticated: bool = Depends(verify_bearer_token),
 ) -> Response:
     """Delete a place.
 

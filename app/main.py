@@ -2,11 +2,11 @@
 from contextlib import asynccontextmanager
 
 from app.database import create_db_and_tables
+from app.middleware.auth import verify_bearer_token
 from app.routers import places
 from app.schemas import HealthResponse
 
-from fastapi import FastAPI
-
+from fastapi import FastAPI, Depends
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -22,7 +22,10 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-app.include_router(router=places.router)
+app.include_router(
+    router=places.router,
+    # dependencies=[Depends(verify_bearer_token)],  # Protect the entire router
+)
 
 
 @app.get("/health", tags=["health"])
