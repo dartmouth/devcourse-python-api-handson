@@ -11,24 +11,17 @@ from collections.abc import Iterator
 
 from sqlmodel import Session, SQLModel, create_engine
 
-# The database URL can be overridden (the test suite points it at a temporary
-# database in Checkpoint 7).
+# The database URL can be overridden
 DATABASE_URL = os.environ.get("DATABASE_URL", "sqlite:///./dartmouth_places.db")
 
-# check_same_thread=False lets the SQLite connection be shared across the
-# threads FastAPI's TestClient and Uvicorn workers use.
 engine = create_engine(
     DATABASE_URL,
     echo=False,
-    connect_args={"check_same_thread": False},
 )
 
 
 def create_db_and_tables() -> None:
     """Create all tables. Safe to call repeatedly."""
-    # Importing models registers them on SQLModel.metadata.
-    from app import models  # noqa: F401
-
     SQLModel.metadata.create_all(engine)
 
 
