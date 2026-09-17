@@ -10,7 +10,7 @@ from fastapi import FastAPI, Depends
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Create tables on startup. Seed data with `uv run seed`.
+    # Create tables on startup. 
     create_db_and_tables()
     yield
 
